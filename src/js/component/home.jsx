@@ -1,26 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 
 //include images into your bundle
 import rigoImage from "../../img/rigo-baby.jpg";
 
 //create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
-};
+	const [inputValue,setInputValue]=useState("")
+	const [tareas,setTareas]=useState([])
 
+	function pressEnter(e) {
+		if (e.key=="Enter"){
+			console.log("Oprimiste enter")
+			setTareas(tareas.concat(inputValue))
+			setInputValue("")
+		}
+	}
+	return(
+		<>
+			<div>
+				<h1>Lista de tareas</h1>
+				<ul>
+					<li> 
+								<input 
+									type="text" 
+									placeholder="Ingrese tarea a realizar"
+									onChange={(e)=>setInputValue(e.target.value)}
+									value={inputValue}
+									onKeyDown={pressEnter}
+									/>
+					</li>
+					{tareas.map((elemento,index) => 
+					<li className="d-flex justify-content-between">
+						<div>{elemento}</div>
+						<div><i 
+							className="fas fa-times"
+							onClick={()=>setTareas(tareas.filter((elemento,newIndex)=>index!=newIndex))}
+						></i></div>
+					</li>)}
+					<span>{tareas.length} tareas</span>
+				</ul>
+			</div>
+		</>
+	)
+}
+	
+	
 export default Home;
