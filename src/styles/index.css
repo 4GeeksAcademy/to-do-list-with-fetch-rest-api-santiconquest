@@ -28,6 +28,7 @@ input{
 h1{
     margin-left: 10px;
 }
-/* li:hover{
-    background-color: blue;
-} */
+
+.fa-times:hover{
+    color:red
+}
