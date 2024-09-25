@@ -12,14 +12,6 @@ const Home = () => {
 		getTask()
 	},[])
 
-	function pressEnter(e) {
-		if (e.key=="Enter"){
-			console.log("Oprimiste enter")
-			setTareas(tareas.concat(inputValue))
-			setInputValue("")
-		}
-	}
-
 	function getTask() {
 		console.log("Presionaaste el boton Get Task")
 		fetch("https://playground.4geeks.com/todo/users/Lebron")
@@ -42,23 +34,24 @@ const Home = () => {
 		};
 		fetch('https://playground.4geeks.com/todo/todos/Lebron', requestOptions)
 			.then(response => response.json())
-			.then(data => getTask());
+			.then(data => getTask(),setInputValue([]));
 	}
 
-	function deleteTask() {
-		console.log("Presionaaste el boton Delete Task")
+	function deleteTask(id) {
+		console.log("Presionaaste el boton Delete Task",id)
 		const requestOptions = {
 			method: 'DELETE',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(
-				{
-					"label": "Ir a la cancha",
-				})
+			body: JSON.stringify()
 		};
-		fetch("https://playground.4geeks.com/todo/todos/36",
+		fetch(`https://playground.4geeks.com/todo/todos/${id}`,
 			requestOptions
 		)
-		.then((response) => response.text())
+		.then((response) => {
+			if(response.ok){
+				getTask(setTareas)
+			}
+	})
 		.then((result) => console.log(result))
 	}
 
@@ -73,7 +66,7 @@ const Home = () => {
 									placeholder="Ingrese tarea a realizar"
 									onChange={(e)=>setInputValue(e.target.value)}
 									value={inputValue}
-									onKeyDown={pressEnter}
+									
 									/>
 					</li>
 					{tareas.map((elemento,index) => 
@@ -82,15 +75,15 @@ const Home = () => {
 						<div>{elemento.label}</div>
 						<div><i 
 							className="fas fa-times"
-							onClick={()=>setTareas(tareas.filter((elemento,newIndex)=>index!=newIndex))}
+							onClick={()=>deleteTask(elemento.id)}
 						></i></div>
 					</li>)}
 					<span>{tareas.length} tareas</span>
 				</ul>
 
-				<button onClick={getTask}>Ver tareas</button>
+				{/* <button onClick={getTask}>Ver tareas</button> */}
 				<button onClick={addTask}>Agregar tarea</button>
-				<button onClick={deleteTask}>Eliminar tarea</button>
+				{/* <button onClick={deleteTask}>Eliminar tarea</button> */}
 
 					
 			</div>
